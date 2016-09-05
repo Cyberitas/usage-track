@@ -1,5 +1,5 @@
 <!doctype HTML>
-<html data-usagetrack-config='{"clickDefault": "ga-event"}'>
+<html data-usagetrack-config='{"clickDefault": "console"}'>
 <head>
 
 <script>
@@ -17,7 +17,18 @@
 <script src="../usage-track.js"></script>
 </head>
 <body>
-   <button data-usagetrack='{"data": ["Category", "Action", "Label", 1234]}'>Click Me</button>
+   <header data-usagetrack-group='Header'>
+      <nav style="background: #ccc;" data-usagetrack-group='Nav'>
+         <a href="#" data-usagetrack='Link 1'>Link 1</a>
+         <a href="#" data-usagetrack='Link 2'>Link 2</a>
+      </nav>
+   </header>
+
+   <footer style="background:#999;" data-usagetrack='{"data": ["Footer", "Links"], "clickEvent": false}'>
+      <a href="#" data-usagetrack='Link 3'>Link 3</a>
+      <a href="#" data-usagetrack='{"data": ["New Category, "Link 4"]}'>Link 4</a>
+      <a href="#" data-usagetrack='{"dataAppend": ["Link 5"]}'>Link 5</a>
+   </footer>
 </body>
 </html>
 
