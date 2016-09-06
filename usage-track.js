@@ -1,4 +1,12 @@
+/**
+ * @license usage-track 0.0.3 Copyright Cyberitas Technologies LLC
+ * Released under MIT license
+ * 
+ * Documentation and usage https://github.com/Cyberitas/usage-track
+ */
+
 var usagetrack;
+
 (function (global, dom, $) {
    var config = {
          clickDefault: null,
@@ -33,6 +41,7 @@ var usagetrack;
    };
 
    function onClick(event) {
+      // TODO fix the way this inherits data from parents, integrate with filters and handlers, extract DOM traversal
       var jEl = $(event.target),
         usage,
         usageData = [],
@@ -80,7 +89,15 @@ var usagetrack;
       fHandler(jEl, aData);
    }
 
-   usagetrack = function() {
-      console.log('called usage track');
+   usagetrack = {
+      addHandler: function(sName, fCallback) {
+         // TODO Write this
+      },
+      addFilter: function(sType, fCallback) {
+         // TODO Write this
+      },
+      track: function(sHandler, oConfig) {
+         // TODO Write this
+      }
    };
 }(this, window, $));
