@@ -3,7 +3,7 @@ Usage track is a small JS library for tracking web usage via markup.
 
 ## Dependencies and installation
 
-Requires jQuery to be loaded before usage-track, usage-track can be included in the head or anywhere in the body or dyanmically with something like RequireJS.
+Requires jQuery to be loaded before usage-track, usage-track can be included in the head or anywhere in the body or dynamically with something like RequireJS.
 
 ### Basic tracking example
 
@@ -16,7 +16,7 @@ Place your configuration in a data attribute on an element of the page, and mark
 <button data-usagetrack='{"data": ["Category", "Action", "Label", 1234]}'>Click Me</button>
 ```
 
-### Nested tracking example
+## Nested tracking example
 
 [NestedExample.html](examples/NestedExample.html)
 
@@ -33,12 +33,12 @@ Additionally a short-hand is available to do this same thing:
 ```html
 <footer style="background:#999;" data-usagetrack-group='Footer'>
    <nav data-usagetrack-group='Links'>
-      <a href="#" data-usagetrack='Link Clicked'>Link</a>
+      <a href="#" data-usagetrack-click='Link Clicked'>Link</a>
    </nav>
 </footer>
 ```
 
-### Handlers
+## Handlers
 
 There are a few built in trackers:
 
@@ -59,7 +59,7 @@ usagetrack.addHandler('my-handler', handlerCallbackFunction);
 usagetrack.track('my-handler', {data: ['Test Event'], myUniqueId: 12345});
 ```
 
-### Filters
+## Filters
 
 In addition to handlers, usage can be tracked via filters:
 
