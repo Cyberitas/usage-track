@@ -1,4 +1,5 @@
 /**
+ * jslint browser: true
  * @license usage-track 0.0.4 Copyright Cyberitas Technologies LLC
  * Released under MIT license
  * 
@@ -8,36 +9,36 @@
 var usagetrack;
 
 (function (global, dom, $) {
+   "use strict";
+   
    var config = {
          clickDefault: null,
          clickDefaultDom: dom,
          clickDefaultConfig: {
             clickEvent: true
-         }
+         },
+         viewDefault: null,
+         viewOnReady: false,
       },
       domConfig,
       aHandlers = {};
 
    if (!$) {
-      throw "JQuery is required for usage-track."
+      throw "JQuery is required for usage-track.";
    }
 
    domConfig = $('[data-usagetrack-config]').data('usagetrackConfig');
-   if (typeof domConfig == 'object') {
+   if (typeof domConfig === 'object') {
       config = $.extend(config, domConfig);
    }
 
-   if (config.clickDefaultDom) {
-      $(config.clickDefaultDom).click(onClick);
-   }
-   
    aHandlers['ga-event'] = function(jEl, aData) {
       // TODO ensure oData[3] is an integer
-      ga('send', 'event', aData[0], aData[1], aData[2], aData[3]);
+      global.ga('send', 'event', aData[0], aData[1], aData[2], aData[3]);
    };
 
    aHandlers['console'] = function(jEl, aData) {
-      console.log('Usage Click Event:', aData);
+      global.console.log('Usage Click Event:', aData);
    };
    
    /**
@@ -50,7 +51,7 @@ var usagetrack;
         usage = $.extend({}, config.clickDefaultConfig),
         aParents = jEl.parents().get().reverse();
 
-      usage['__combinedData'] = [];
+      usage.__combinedData = [];
       
       aParents.push(jEl.get(0));
 
@@ -61,23 +62,23 @@ var usagetrack;
             parentUsage = jParent.data('usagetrack');
 
          if (sGroup) {
-            if (typeof sGroup != 'string') {
+            if (typeof sGroup !== 'string') {
                throw "Usage group must be a string";
             }
-            usage['__combinedData'].push(sGroup);
+            usage.__combinedData.push(sGroup);
          } else if (sClick) {
-            if (typeof sClick != 'string') {
+            if (typeof sClick !== 'string') {
                throw "Usage click must be a string";
             }
-            usage['__combinedData'].push(sClick);
+            usage.__combinedData.push(sClick);
             usage.clickEvent = config.clickDefaultConfig.clickEvent;
             if (usage.clickEvent) {
                if (config.clickDefault) {
-                  handle(config.clickDefault, jEl, usage['__combinedData']);
+                  handle(config.clickDefault, jEl, usage.__combinedData);
                }
             }
          } else if (parentUsage) {
-            if (typeof parentUsage != 'object') {
+            if (typeof parentUsage !== 'object') {
                throw "Usage must be a json object";
             }
             $.extend(usage, parentUsage);
@@ -85,25 +86,40 @@ var usagetrack;
                usage.clickEvent = config.clickDefaultConfig.clickEvent;
             }
             if (parentUsage.data) {
-               usage['__combinedData'] = $.merge([], parentUsage.data);
+               usage.__combinedData = $.merge([], parentUsage.data);
             } else if (parentUsage.dataAppend) {
-               usage['__combinedData'] = $.merge(usage['__combinedData'], parentUsage.dataAppend);
+               usage.__combinedData = $.merge(usage.__combinedData, parentUsage.dataAppend);
             }
             if (usage.clickEvent) {
                if (config.clickDefault) {
-                  handle(config.clickDefault, jEl, usage['__combinedData']);
+                  handle(config.clickDefault, jEl, usage.__combinedData);
                }
             }
          }
       });
    }
+   
+   if (config.clickDefaultDom) {
+      $(config.clickDefaultDom).click(onClick);
+   }
+   if (config.viewOnReady) {
+      $(document).ready(function() {
+         usagetrack.process('view', document);
+      });
+   }
+
 
    function handle(sHandler, jEl, aData) {
       var fHandler = aHandlers[sHandler];
       if (!fHandler) {
-         throw "Cannot find handler ["+sHandler+"]";
+         throw "Cannot find handler [" + sHandler + "]";
       }
       fHandler(jEl, aData);
+   }
+
+   // http://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+   function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
    }
 
    usagetrack = {};
@@ -116,4 +132,16 @@ var usagetrack;
    usagetrack.track = function(sHandler, oConfig) {
       // TODO Write this
    };
-}(this, window, $));
+   usagetrack.process = function(sType, jElement) {
+      var camelCaseType = capitalizeFirstLetter(sType);
+      $(jElement).find("[data-usagetrack-" + sType + "]").each(function() {
+         var jEl = $(this);
+         if (!jEl.data('usagetrack" + camelCaseType + "Processed')) {
+            jEl.data('usagetrack" + camelCaseType + "Processed', true);
+            if (config.viewDefault) {
+               handle(config.viewDefault, jEl, jEl.data("usagetrack" + camelCaseType).data);
+            }
+         }
+      });
+   };
+}(this, window, this.$));
