@@ -93,6 +93,11 @@ var usagetrack;
             if (usage.clickEvent) {
                if (config.clickDefault) {
                   handle(config.clickDefault, jEl, usage.__combinedData);
+                  if (usage.additional) {
+                     for (var i = 0; i < usage.additional.length; i++) {
+                        handle(config.clickDefault, jEl, usage.additional[i]);
+                     }
+                  }
                }
             }
          }
@@ -123,6 +128,7 @@ var usagetrack;
    }
 
    usagetrack = {};
+   usagetrack.onClick = onClick;
    usagetrack.addHandler = function(sName, fCallback) {
       // TODO Write this
    };

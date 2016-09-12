@@ -27,7 +27,16 @@
    <footer style="background:#999;" data-usagetrack='{"data": ["Footer", "Links"], "clickEvent": false}'>
       <a href="#" data-usagetrack-click='Link 3'>Link 3</a>
       <a href="#" data-usagetrack='{"data": ["New Category", "Link 4"]}'>Link 4</a>
-      <a href="#" data-usagetrack='{"dataAppend": ["Link 5"]}'>Link 5</a>
+      <a href="#" data-usagetrack='{"dataAppend": ["Link 5"], "additional": [["A", "B", "C"], ["X", "Y"]]}'>Link 5</a>
+      <a href="#" id="js-click-example" data-usagetrack-click='Link 6'>Link 6</a>
+      <script>
+         $("#js-click-example").click(function(event) {
+            usagetrack.onClick(event);
+            
+            event.preventDefault();
+            return false;
+         });
+      </script>
    </footer>
 </body>
 </html>
