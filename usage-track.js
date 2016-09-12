@@ -122,7 +122,7 @@ var usagetrack;
    }
    if (config.viewOnReady) {
       $(document).ready(function() {
-         usagetrack.process('view', document);
+         process('view', document);
       });
    }
 
