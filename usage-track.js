@@ -104,6 +104,19 @@ var usagetrack;
       });
    }
    
+   function process(sType, jElement) {
+      var camelCaseType = capitalizeFirstLetter(sType);
+      $(jElement).find("[data-usagetrack-" + sType + "]").each(function() {
+         var jEl = $(this);
+         if (!jEl.data('usagetrack" + camelCaseType + "Processed')) {
+            jEl.data('usagetrack" + camelCaseType + "Processed', true);
+            if (config.viewDefault) {
+               handle(config.viewDefault, jEl, jEl.data("usagetrack" + camelCaseType).data);
+            }
+         }
+      });
+   }
+   
    if (config.clickDefaultDom) {
       $(config.clickDefaultDom).click(onClick);
    }
@@ -138,16 +151,5 @@ var usagetrack;
    usagetrack.track = function(sHandler, oConfig) {
       // TODO Write this
    };
-   usagetrack.process = function(sType, jElement) {
-      var camelCaseType = capitalizeFirstLetter(sType);
-      $(jElement).find("[data-usagetrack-" + sType + "]").each(function() {
-         var jEl = $(this);
-         if (!jEl.data('usagetrack" + camelCaseType + "Processed')) {
-            jEl.data('usagetrack" + camelCaseType + "Processed', true);
-            if (config.viewDefault) {
-               handle(config.viewDefault, jEl, jEl.data("usagetrack" + camelCaseType).data);
-            }
-         }
-      });
-   };
+   usagetrack.process = process;
 }(this, window, this.$));
