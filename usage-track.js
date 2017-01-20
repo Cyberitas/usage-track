@@ -143,7 +143,7 @@ var usagetrack;
    usagetrack = {};
    usagetrack.onClick = onClick;
    usagetrack.addHandler = function(sName, fCallback) {
-      // TODO Write this
+      aHandlers[sName] = fCallback;
    };
    usagetrack.addFilter = function(sType, fCallback) {
       // TODO Write this
