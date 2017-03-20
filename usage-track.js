@@ -18,10 +18,11 @@ var usagetrack;
             clickEvent: true
          },
          viewDefault: null,
-         viewOnReady: false,
+         viewOnReady: false
       },
       domConfig,
-      aHandlers = {};
+      aHandlers = {},
+      aFilters = [];
 
    if (!$) {
       throw "JQuery is required for usage-track.";
@@ -54,6 +55,10 @@ var usagetrack;
       usage.__combinedData = [];
       
       aParents.push(jEl.get(0));
+
+      for (var i = 0; i < aFilters.length; i++) {
+         aFilters[i]('click', jEl, aParents);
+      }
 
       $.each(aParents, function() {
          var jParent = $(this),
@@ -145,8 +150,8 @@ var usagetrack;
    usagetrack.addHandler = function(sName, fCallback) {
       aHandlers[sName] = fCallback;
    };
-   usagetrack.addFilter = function(sType, fCallback) {
-      // TODO Write this
+   usagetrack.addFilter = function(fCallback) {
+      aFilters.push(fCallback);
    };
    usagetrack.track = function(sHandler, oConfig) {
       // TODO Write this
