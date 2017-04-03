@@ -50,14 +50,19 @@ var usagetrack;
       // TODO fix the way this inherits data from parents, integrate with filters and handlers, extract DOM traversal
       var jEl = $(event.target),
         usage = $.extend({}, config.clickDefaultConfig),
-        aParents = jEl.parents().get().reverse();
+        aParents = jEl.parents().get().reverse(),
+        bHandled = false;
 
       usage.__combinedData = [];
       
       aParents.push(jEl.get(0));
 
       for (var i = 0; i < aFilters.length; i++) {
-         aFilters[i]('click', jEl, aParents);
+         bHandled = aFilters[i]('click', jEl, aParents) || bHandled;
+      }
+
+      if (bHandled) {
+         return;
       }
 
       $.each(aParents, function() {
@@ -157,4 +162,4 @@ var usagetrack;
       // TODO Write this
    };
    usagetrack.process = process;
-}(this, window, this.$));
+}(this, window, window.$));
